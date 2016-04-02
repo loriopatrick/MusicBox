@@ -1,0 +1,127 @@
+body {
+    font-family: sans-serif
+}
+
+.frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-width: 300px;
+    overflow: hidden;
+}
+
+.player {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: #2b71b6;
+}
+
+.player .middle * {
+    float: left;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 10px 0;
+    color: white;
+}
+
+.player a.btn {
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    width: 40px;
+}
+
+.player a.btn:hover {
+    color: #d4e2f0;
+}
+
+.player .title {
+    max-width: 200px;
+    margin-left: 20px;
+}
+
+.window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.middle {
+    max-width: 800px;
+    margin: auto;
+    min-width: 600px;
+    padding: 0;
+}
+
+.track {
+    float: left;
+    border-left: solid 5px transparent;
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 5px;
+    -webkit-user-select: none;
+    cursor: pointer;
+    height: 30px;
+    position: relative;
+}
+
+.track:hover:before, .track.playing:before {
+    content: "►";
+    height: 30px;
+    position: absolute;
+    top: 0;
+    left: -30px;
+    font-size: 20px;
+    padding: 4px;
+    box-sizing: border-box;
+    width: 30px;
+    float: left;
+    margin-top: 5px;
+    color: #2b71b6;
+}
+
+.track:hover {
+    background-color: #f7f5f5;
+    border-color: #2b71b6;
+}
+
+.track.playing:hover {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.track.playing:hover:before {
+    content: "❚❚";
+}
+
+.track .title {
+    float: left;
+    padding: 5px;
+}
+
+.track .tag:before {
+    content: "#";
+    font-size: 12px;
+    color: #2b71b6;
+    font-weight: bold;
+}
+
+.track .tag {
+    float: left;
+    padding: 2px;
+    border-radius: 2px;
+    margin-right: 5px;
+    font-size: 12px;
+    margin-top: 7px;
+}
