@@ -1,0 +1,17 @@
+{
+  "name": "music-box",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "web-dev": "watchify -o public/app.js public/src/index.js"
+  },
+  "author": "Patrick Lorio <patrick@lorio.me>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.13.4",
+    "r-dom": "2.1.0",
+    "react": "0.14.8",
+    "react-dom": "0.14.8"
+  }
+}
