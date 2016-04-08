@@ -9,27 +9,29 @@ var HASH_CHAR = '#';
 var RIGHT_CHAR = '❱';
 
 var Player = React.createClass({
-    getInitialState: function() {
-        return {
-            playing: false,
-            track_title: 'Test',
-            tags: []
-        };
+    onHash: function() {
+        var track = this.props.track;
+        if (this.props.hashes.indexOf(track) > -1) {
+            this.props.rmHash(track);
+        } else {
+            this.props.addHash(track);
+        }
     },
-    pause_play: function() {
-        this.setState({playing: !this.state.playing})
-    },
-    play_next: function() {
-    },
-    play_prev: function() {
+    onPP: function() {
+        if (this.props.playing) {
+            this.props.onPlay();
+        } else {
+            this.props.onPause();
+        }
     },
     render: function() {
-        var pp_btn_char = this.state.playing ? PAUSE_CHAR : PLAY_CHAR;
+        var pp_btn_char = this.props.playing ? PAUSE_CHAR : PLAY_CHAR;
+        var in_hash = this.props.hashes.indexOf(this.props.track) > -1;
         return r.div({className: 'player'}, [
-            r.a({className: 'btn', onClick: this.pause_prev}, HASH_CHAR),
-            r.a({className: 'btn', onClick: this.pause_prev}, LEFT_CHAR),
-            r.a({className: 'btn', onClick: this.pause_play}, pp_btn_char),
-            r.a({className: 'btn', onClick: this.pause_next}, RIGHT_CHAR)
+            r.a({className: 'btn' + (in_hash? ' active' : ''), onClick: this.onHash}, HASH_CHAR),
+            r.a({className: 'btn', onClick: this.props.onPrev}, LEFT_CHAR),
+            r.a({className: 'btn', onClick: this.onPP}, pp_btn_char),
+            r.a({className: 'btn', onClick: this.props.onNext}, RIGHT_CHAR)
             //r.span({className: 'title'}, this.state.track_title)
         ]);
     }

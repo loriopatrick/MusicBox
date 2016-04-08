@@ -11,6 +11,7 @@ a {
 }
 
 @blue: #2b71b6;
+@orange: #e87f00;
 @blue_light: #f7f7f7;
 @gray_light: #cecece;
 @gray_dark: #565657;
@@ -77,6 +78,13 @@ a {
         right: 0;
         bottom: 0;
 
+        hr {
+            width: 10px;
+            border: solid 3px #CECECE;
+            margin: 5px 0;
+            float: left;
+        }
+
         a {
             float: left;
             width: 100%;
@@ -93,11 +101,14 @@ a {
                 font-weight: normal;
             }
 
-            &.active:before {
+            &.active {
                 color: @gray_dark;
+                &:before {
+                    color: @gray_dark;
+                }
             }
 
-            &:hover {
+            &.active, &:hover {
                 padding-left: 20px;
                 color: darken(@gray_light, 40%);
             }
@@ -127,9 +138,14 @@ a {
         color: white;
         user-select: none;
         -webkit-user-select: none;
+        font-weight: bold;
 
         &:hover {
             background: darken(@blue, 10%);
+        }
+
+        &.active {
+            color: black;
         }
     }
 }
@@ -146,12 +162,25 @@ a {
 .track {
     float: left;
     width: 100%;
-    margin-bottom: 5px;
-    padding: 5px;
+    padding: 2px 5px;
     -webkit-user-select: none;
     cursor: pointer;
-    height: 30px;
     position: relative;
+
+    &:hover {
+        background-color: lighten(@blue, 50%);
+    }
+
+    &.active {
+        background-color: lighten(@orange, 40%);
+
+        .btns a.active {
+            color: @orange;
+            &:hover {
+                color: white;
+            }
+        }
+    }
 
     .btns {
         a {
@@ -161,6 +190,12 @@ a {
             font-weight: bold;
             &:hover {
                 color: @gray_dark;
+            }
+            &.active {
+                color: @blue;
+                &:hover {
+                    color: white;
+                }
             }
         }
     }
@@ -183,6 +218,10 @@ a {
             content: "# ";
             font-size: 12px;
             font-weight: normal;
+        }
+
+        &:hover {
+            background-color: lighten(@blue, 30%);
         }
     }
 }

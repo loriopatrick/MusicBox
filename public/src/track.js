@@ -4,25 +4,19 @@ var r = require('r-dom');
 var PLAY_CHAR = '►';
 
 var Track = React.createClass({
-    getInitialState: function() {
-        return {
-            playing: false,
-            tags: this.props.tags || [],
-            title: this.props.title,
-            selected: false
-        };
+    onHash: function() {
+        this.props.onHash(this.props.track, !this.props.inHash);
     },
     render: function() {
         var tags = [];
-        this.state.tags.forEach(function(tag) {
-            tags.push(r.span({className: 'tag'}, tag));
+        this.props.track.tags.forEach(function(tag) {
+            tags.push(r.span({key: tag, className: 'tag'}, tag));
         });
-        return r.div({className: 'track'}, [
+        return r.div({className: 'track' + (this.props.playing? ' active' : '')}, [
             r.div({className: 'btns'}, [
-                r.a('+'),
-                r.a('#')
+                r.a({onClick: this.onHash, className: this.props.inHash? 'active' : ''}, '#')
             ]),
-            r.div({className: 'title'}, this.state.title),
+            r.div({className: 'title'}, this.props.track.title),
             tags
         ]);
     }

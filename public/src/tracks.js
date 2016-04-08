@@ -4,17 +4,26 @@ var r = require('r-dom');
 var Track = require('./track');
 
 var Tracks = React.createClass({
-    getInitialState: function() {
-        return {
-        };
+    onHash: function(track, add) {
+        if (add) {
+            this.props.addHash(track);
+        } else {
+            this.props.rmHash(track);
+        }
     },
     render: function() {
         var tracks = [];
+        var self = this;
 
-        tracks.push(r(Track, {title: 'test', tags: ['foo', 'bar']}));
-        tracks.push(r(Track, {title: 'apple', tags: ['bard', 'plorio']}));
-
-        return r.div(tracks);
+        return r.div(this.props.tracks.map(function(track) {
+            return r(Track, {
+                key: track.id,
+                inHash: self.props.hashes.indexOf(track) > -1,
+                playing: self.props.playing === track,
+                track: track,
+                onHash: self.onHash
+            });
+        }));
     }
 });
 
