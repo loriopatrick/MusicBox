@@ -22,18 +22,18 @@ var Sidebar = React.createClass({
         if (tracks.length > 0) {
             playlists.push(r.a({
                 key: 'clear',
-                onClick: this.props.clearPlaylist
+                onClick: this.props.onClearHashes
             }, 'clear ' + tracks.length + ' track' + (tracks.length > 1 ? 's' : '')));
 
             playlists.push(r.a({
                 key: 'new-play',
-                onClick: this.props.createPlaylist
+                onClick: this.props.onCreatePlaylist
             }, 'create playlist'));
 
             if (current !== 'all') {
                 playlists.push(r.a({
                     key: 'add-play',
-                    onClick: this.props.addToPlaylist
+                    onClick: this.props.onAddPlaylist
                 }, 'add to ' + current));
             }
 
@@ -48,7 +48,7 @@ var Sidebar = React.createClass({
                 key: 'play-' + name,
                 className: current === name? 'active' : '',
                 onClick: function() {
-                    self.props.setPlaylist(name);
+                    self.props.onSetPlaylist(name);
                 }
             }, name));
         }

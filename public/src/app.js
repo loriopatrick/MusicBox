@@ -6,8 +6,8 @@ var Tracks = require('./tracks');
 var Sidebar = require('./sidebar');
 
 var tracks = [
-    {id: 1, title: 'Some Track', tags: ['a', 'b', 'c']},
-    {id: 2, title: 'Test', tags: ['a', 'b', 'c']}
+    {id: 1, title: 'Some Track', tags: ['test', 'foo']},
+    {id: 2, title: 'Test', tags: ['bar', 'foo']}
 ];
 
 var App = React.createClass({
@@ -32,13 +32,41 @@ var App = React.createClass({
     setPlaylist: function(name) {
         this.setState({ playlist: name });
     },
+    clearHashes: function() {
+        this.setState({ hashes: [] });
+    },
+    addToPlaylistPrompt: function() {
+        this.addToPlaylist(prompt('playlist name'));
+    },
+    addToCurrentPlaylist: function() {
+        this.addToPlaylist(this.state.playlist);
+    },
+    addToPlaylist: function(name) {
+        if (!name) {
+            return;
+        }
+
+        // TODO: api call
+        this.state.hashes.forEach(function(track) {
+            if (track.tags.indexOf(name) === -1) {
+                track.tags.push(name);
+            }
+        });
+        if (this.state.playlists.indexOf(name) === -1) {
+            this.state.playlists.push(name);
+        }
+        this.setState({ tracks: this.state.tracks, hashes: [], playlists: this.state.playlists, playlist: name });
+    },
     render: function() {
         return r.div({className: 'frame'}, [
             r(Sidebar, {
                 playlist: this.state.playlist,
                 hashes: this.state.hashes,
-                setPlaylist: this.setPlaylist,
-                playlists: this.state.playlists
+                playlists: this.state.playlists,
+                onSetPlaylist: this.setPlaylist,
+                onClearHashes: this.clearHashes,
+                onCreatePlaylist: this.addToPlaylistPrompt,
+                onAddPlaylist: this.addToCurrentPlaylist
             }),
             r.div({className: 'window'}, [
                 r(Tracks, {
@@ -46,8 +74,9 @@ var App = React.createClass({
                     queue: this.state.queue,
                     hashes: this.state.hashes,
                     playing: this.state.playing,
-                    addHash: this.addHash,
-                    rmHash: this.rmHash
+                    onAddHash: this.addHash,
+                    onRmHash: this.rmHash,
+                    onSetPlaylist: this.setPlaylist
                 })
             ]),
             r(Player, {

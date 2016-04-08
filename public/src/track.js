@@ -9,8 +9,15 @@ var Track = React.createClass({
     },
     render: function() {
         var tags = [];
+        var self = this;
         this.props.track.tags.forEach(function(tag) {
-            tags.push(r.span({key: tag, className: 'tag'}, tag));
+            tags.push(r.span({
+                key: tag,
+                className: 'tag',
+                onClick: function() {
+                    self.props.onSetPlaylist(tag)
+                }
+            }, tag));
         });
         return r.div({className: 'track' + (this.props.playing? ' active' : '')}, [
             r.div({className: 'btns'}, [

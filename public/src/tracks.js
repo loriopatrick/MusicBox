@@ -6,9 +6,9 @@ var Track = require('./track');
 var Tracks = React.createClass({
     onHash: function(track, add) {
         if (add) {
-            this.props.addHash(track);
+            this.props.onAddHash(track);
         } else {
-            this.props.rmHash(track);
+            this.props.onRmHash(track);
         }
     },
     render: function() {
@@ -21,7 +21,8 @@ var Tracks = React.createClass({
                 inHash: self.props.hashes.indexOf(track) > -1,
                 playing: self.props.playing === track,
                 track: track,
-                onHash: self.onHash
+                onHash: self.onHash,
+                onSetPlaylist: self.props.onSetPlaylist
             });
         }));
     }
