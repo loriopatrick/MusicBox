@@ -17,7 +17,7 @@ var Tracks = React.createClass({
 
         return r.div(this.props.tracks.map(function(track) {
             return r(Track, {
-                key: track.id,
+                key: track,
                 inHash: self.props.hashes.indexOf(track) > -1,
                 playing: self.props.playing === track,
                 track: track,

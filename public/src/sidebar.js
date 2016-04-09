@@ -45,7 +45,7 @@ var Sidebar = React.createClass({
 
         function add(name) {
             playlists.push(r.a({
-                key: 'play-' + name,
+                key: name,
                 className: current === name? 'active' : '',
                 onClick: function() {
                     self.props.onSetPlaylist(name);

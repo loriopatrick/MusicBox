@@ -1,25 +1,35 @@
 var React = require('react');
 var r = require('r-dom');
+var request = require('superagent');
 
 var Player = require('./player');
 var Tracks = require('./tracks');
 var Sidebar = require('./sidebar');
 
-var tracks = [
-    {id: 1, title: 'Some Track', tags: ['test', 'foo']},
-    {id: 2, title: 'Test', tags: ['bar', 'foo']}
-];
-
 var App = React.createClass({
     getInitialState: function() {
         return {
             playlist: 'all',
-            playlists: ['test', 'foo', 'bar', 'plorio/test'],
-            tracks: tracks,
+            playlists: [],
+            tracks: [],
             hashes: [],
-            playing: tracks[0],
+            playing: null,
             paused: false
         };
+    },
+    componentDidMount: function() {
+        this.refresh();
+    },
+    refresh: function() {
+        var self = this;
+        request.get('/rpc?method=playlists.list').end(function(err, res) {
+            var data = JSON.parse(res.text);
+            self.setState({ playlists: data });
+        });
+        request.get('/rpc?method=tracks.list&playlist=' + this.state.playlist).end(function(err, res) {
+            var data = JSON.parse(res.text);
+            self.setState({ tracks: data });
+        });
     },
     setPlayingTrack: function(track) {
         this.setState({ playing: track, paused: false });
@@ -33,7 +43,11 @@ var App = React.createClass({
         this.setState({ hashes: this.state.hashes });
     },
     setPlaylist: function(name) {
-        // TODO: api call
+        var self = this;
+        request.get('/rpc?method=tracks.list&playlist=' + name).end(function(err, res) {
+            var data = JSON.parse(res.text);
+            self.setState({ playlist: name, tracks: data });
+        });
         this.setState({ playlist: name });
     },
     clearHashes: function() {
@@ -53,12 +67,14 @@ var App = React.createClass({
             return;
         }
 
-        // TODO: api call
-        this.state.hashes.forEach(function(track) {
-            if (track.tags.indexOf(name) === -1) {
-                track.tags.push(name);
-            }
+        var self = this;
+        request
+        .post('/rpc?method=playlist.add&playlist=' + name)
+        .send(this.state.hashes)
+        .end(function(err, res) {
+            self.refresh();
         });
+
         if (this.state.playlists.indexOf(name) === -1) {
             this.state.playlists.push(name);
         }
