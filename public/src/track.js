@@ -4,8 +4,11 @@ var r = require('r-dom');
 var PLAY_CHAR = '►';
 
 var Track = React.createClass({
-    onHash: function() {
+    onHash: function(evt) {
         this.props.onHash(this.props.track, !this.props.inHash);
+    },
+    onPlay: function() {
+        this.props.onPlay(this.props.track);
     },
     render: function() {
         var tags = [];
@@ -19,7 +22,10 @@ var Track = React.createClass({
                 }
             }, tag));
         });
-        return r.div({className: 'track' + (this.props.playing? ' active' : '')}, [
+        return r.div({
+            className: 'track' + (this.props.playing? ' active' : ''),
+            onDoubleClick: this.onPlay
+        }, [
             r.div({className: 'btns'}, [
                 r.a({onClick: this.onHash, className: this.props.inHash? 'active' : ''}, '#')
             ]),

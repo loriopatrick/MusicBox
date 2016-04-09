@@ -22,7 +22,8 @@ var Tracks = React.createClass({
                 playing: self.props.playing === track,
                 track: track,
                 onHash: self.onHash,
-                onSetPlaylist: self.props.onSetPlaylist
+                onSetPlaylist: self.props.onSetPlaylist,
+                onPlay: self.props.onPlay
             });
         }));
     }

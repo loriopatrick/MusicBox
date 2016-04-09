@@ -14,12 +14,15 @@ var App = React.createClass({
     getInitialState: function() {
         return {
             playlist: 'all',
-            playlists: ['test', 'foo', 'bar'],
+            playlists: ['test', 'foo', 'bar', 'plorio/test'],
             tracks: tracks,
             hashes: [],
             playing: tracks[0],
             paused: false
         };
+    },
+    setPlayingTrack: function(track) {
+        this.setState({ playing: track, paused: false });
     },
     addHash: function(track) {
         this.state.hashes.push(track);
@@ -30,6 +33,7 @@ var App = React.createClass({
         this.setState({ hashes: this.state.hashes });
     },
     setPlaylist: function(name) {
+        // TODO: api call
         this.setState({ playlist: name });
     },
     clearHashes: function() {
@@ -40,6 +44,9 @@ var App = React.createClass({
     },
     addToCurrentPlaylist: function() {
         this.addToPlaylist(this.state.playlist);
+    },
+    togglePlay: function() {
+        this.setState({ paused: !this.state.paused });
     },
     addToPlaylist: function(name) {
         if (!name) {
@@ -76,7 +83,8 @@ var App = React.createClass({
                     playing: this.state.playing,
                     onAddHash: this.addHash,
                     onRmHash: this.rmHash,
-                    onSetPlaylist: this.setPlaylist
+                    onSetPlaylist: this.setPlaylist,
+                    onPlay: this.setPlayingTrack
                 })
             ]),
             r(Player, {
@@ -84,7 +92,8 @@ var App = React.createClass({
                 hashes: this.state.hashes,
                 playing: !this.state.paused,
                 addHash: this.addHash,
-                rmHash: this.rmHash
+                rmHash: this.rmHash,
+                onTogglePlay: this.togglePlay
             })
         ]);
     }

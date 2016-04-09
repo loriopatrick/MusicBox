@@ -17,12 +17,9 @@ var Player = React.createClass({
             this.props.addHash(track);
         }
     },
-    onPP: function() {
-        if (this.props.playing) {
-            this.props.onPlay();
-        } else {
-            this.props.onPause();
-        }
+    onTogglePlay: function() {
+        // TODO: control web audio
+        this.props.onTogglePlay();
     },
     render: function() {
         var pp_btn_char = this.props.playing ? PAUSE_CHAR : PLAY_CHAR;
@@ -30,7 +27,7 @@ var Player = React.createClass({
         return r.div({className: 'player'}, [
             r.a({className: 'btn' + (in_hash? ' active' : ''), onClick: this.onHash}, HASH_CHAR),
             r.a({className: 'btn', onClick: this.props.onPrev}, LEFT_CHAR),
-            r.a({className: 'btn', onClick: this.onPP}, pp_btn_char),
+            r.a({className: 'btn', onClick: this.onTogglePlay}, pp_btn_char),
             r.a({className: 'btn', onClick: this.props.onNext}, RIGHT_CHAR)
             //r.span({className: 'title'}, this.state.track_title)
         ]);
