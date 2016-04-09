@@ -28,7 +28,7 @@ var Sidebar = React.createClass({
                 onClick: function() {
                     self.props.onSetPlaylist(name);
                 }
-            }, name.replace(/\//, ' / ')));
+            }, name.replace(/\//g, ' / ')));
         }
 
         add('all');

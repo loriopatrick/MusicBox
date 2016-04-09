@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -63,7 +64,7 @@ func (self *App) AddPlaylist(playlist string, files []string) error {
 	if err != nil {
 		return err
 	}
-	os.Mkdir(playFolder, 0777)
+	os.MkdirAll(playFolder, 0777)
 	for i := range files {
 		filePath, err := self.GetSongPath(files[i])
 		if err != nil {
@@ -107,24 +108,34 @@ func (self *App) GetSongsPlaylist(playlist string) ([]string, error) {
 }
 
 func (self *App) GetPlaylists() ([]string, error) {
-	playlists := make([]string, 0)
+	playlists := make(map[string]int, 0)
 
-	walk := func(path string, info os.FileInfo, err error) error {
+	walk := func(loc string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() {
-			playlist, err := filepath.Rel(self.PlaylistPath, path)
+		if !info.IsDir() {
+			playlist, err := filepath.Rel(self.PlaylistPath, path.Dir(loc))
 			if err != nil {
 				return err
 			}
 			if playlist != "." {
-				playlists = append(playlists, playlist)
+				playlists[playlist] = 1
 			}
 		}
 		return nil
 	}
 
 	err := filepath.Walk(self.PlaylistPath, walk)
-	return playlists, err
+	if err != nil {
+		return nil, nil
+	}
+
+	res := make([]string, 0, len(playlists))
+	for k := range playlists {
+		res = append(res, k)
+	}
+
+	sort.Strings(res)
+	return res, nil
 }
