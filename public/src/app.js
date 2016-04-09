@@ -72,6 +72,22 @@ var App = React.createClass({
             this.setState({ paused: !this.state.paused });
         }
     },
+    prevTrack: function() {
+        this.upTrack(-1);
+    },
+    nextTrack: function() {
+        this.upTrack(1);
+    },
+    upTrack: function(delta) {
+        var tracks = this.state.tracks;
+        if (tracks.length > 0) {
+            var idx = (tracks.indexOf(this.state.playing) + delta + tracks.length * 2) % tracks.length;
+            this.setState({
+                playing: tracks[idx],
+                paused: false
+            });
+        }
+    },
     addToPlaylist: function(name) {
         if (!name) {
             return;
@@ -119,7 +135,9 @@ var App = React.createClass({
                 playing: !this.state.paused,
                 addHash: this.addHash,
                 rmHash: this.rmHash,
-                onTogglePlay: this.togglePlay
+                onTogglePlay: this.togglePlay,
+                onPrev: this.prevTrack,
+                onNext: this.nextTrack
             })
         ]);
     }

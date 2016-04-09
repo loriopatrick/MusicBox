@@ -25,6 +25,7 @@ var Player = React.createClass({
             if (current_track != this.props.track) {
                 current_track = this.props.track;
                 if (sound) {
+                    sound.unbind('ended');
                     sound.stop();
                     sound = null;
                 }
@@ -32,6 +33,10 @@ var Player = React.createClass({
             if (!sound) {
                 console.log('new sound');
                 sound = new buzz.sound('/rpc?method=track.get&track=' + this.props.track);
+                var self = this;
+                sound.bind('ended', function() {
+                    self.props.onNext();
+                });
                 sound.play();
             }
             if (sound.isPaused()) {

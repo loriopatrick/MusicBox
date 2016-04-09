@@ -18,28 +18,6 @@ var Sidebar = React.createClass({
         var playlists = [];
         var current = this.props.playlist;
 
-        var tracks = this.props.hashes;
-        if (tracks.length > 0) {
-            playlists.push(r.a({
-                key: 'clear',
-                onClick: this.props.onClearHashes
-            }, 'clear ' + tracks.length + ' track' + (tracks.length > 1 ? 's' : '')));
-
-            playlists.push(r.a({
-                key: 'new-play',
-                onClick: this.props.onCreatePlaylist
-            }, 'create playlist'));
-
-            if (current !== 'all') {
-                playlists.push(r.a({
-                    key: 'add-play',
-                    onClick: this.props.onAddPlaylist
-                }, 'add to ' + current));
-            }
-
-            playlists.push(r.hr({key: 'sep'}));
-        }
-
         var filter = this.state.filter;
         var self = this;
 
@@ -60,10 +38,36 @@ var Sidebar = React.createClass({
             }
         });
 
+        var settings = [
+            r.a('-- no tracks selected --')
+        ];
+
+        var tracks = this.props.hashes;
+        if (tracks.length > 0) {
+            settings = [
+                r.a({
+                    key: 'count',
+                }, tracks.length + ' track' + (tracks.length > 1 ? 's' : '') + ' selected'),
+                r.a({
+                    key: 'clear',
+                    onClick: this.props.onClearHashes
+                }, 'clear selection'),
+                r.a({
+                    key: 'new-play',
+                    onClick: this.props.onCreatePlaylist
+                }, 'create playlist')
+            ];
+        }
+
         return r.div({className: 'sidebar'}, [
             r.div({className: 'title'}, 'Music Box'),
             r.input({type: 'text', className: 'search', placeholder: 'playlist', onChange: this.onFilterChange}),
-            r.div({className: 'playlists'}, playlists)
+            r.div({className: 'playlists'}, playlists),
+            r.div({className: 'settings'}, [
+                r.hr(),
+                r.h1('Create Playlist'),
+                r.div(settings)
+            ])
         ]);
     }
 });
