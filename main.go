@@ -99,5 +99,6 @@ func main() {
 
 	http.HandleFunc("/rpc", RpcHandler)
 	http.Handle("/", http.FileServer(http.Dir("public")))
+	log.Println("Start", app)
 	log.Fatal(http.ListenAndServe(app.Host, nil))
 }
