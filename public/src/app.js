@@ -14,7 +14,7 @@ var App = React.createClass({
             tracks: [],
             hashes: [],
             playing: null,
-            paused: false
+            paused: true
         };
     },
     componentDidMount: function() {
@@ -60,7 +60,17 @@ var App = React.createClass({
         this.addToPlaylist(this.state.playlist);
     },
     togglePlay: function() {
-        this.setState({ paused: !this.state.paused });
+        if (!this.state.playing && this.state.paused) {
+            var tracks = this.state.tracks;
+            if (tracks.length > 0) {
+                this.setState({
+                    playing: tracks[Math.floor(Math.random() * tracks.length)],
+                    paused: false
+                });
+            }
+        } else {
+            this.setState({ paused: !this.state.paused });
+        }
     },
     addToPlaylist: function(name) {
         if (!name) {

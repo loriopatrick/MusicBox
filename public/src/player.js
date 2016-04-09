@@ -1,12 +1,14 @@
 var React = require('react');
 var r = require('r-dom');
-var static = require('./static');
 
 var PLAY_CHAR = '►';
 var PAUSE_CHAR = '❚❚';
 var LEFT_CHAR = '❰';
 var HASH_CHAR = '#';
 var RIGHT_CHAR = '❱';
+
+var current_track = null;
+var sound = null;
 
 var Player = React.createClass({
     onHash: function() {
@@ -17,19 +19,39 @@ var Player = React.createClass({
             this.props.addHash(track);
         }
     },
-    onTogglePlay: function() {
-        // TODO: control web audio
-        this.props.onTogglePlay();
-    },
     render: function() {
-        var pp_btn_char = this.props.playing ? PAUSE_CHAR : PLAY_CHAR;
+        var pp_btn_char;
+        if (this.props.playing) {
+            if (current_track != this.props.track) {
+                current_track = this.props.track;
+                if (sound) {
+                    sound.stop();
+                    sound = null;
+                }
+            }
+            if (!sound) {
+                console.log('new sound');
+                sound = new buzz.sound('/rpc?method=track.get&track=' + this.props.track);
+                sound.play();
+            }
+            if (sound.isPaused()) {
+                sound.play();
+            }
+            pp_btn_char = PAUSE_CHAR;
+        } else {
+            if (sound) {
+                sound.pause();
+            }
+            pp_btn_char = PLAY_CHAR;
+        }
+
         var in_hash = this.props.hashes.indexOf(this.props.track) > -1;
         return r.div({className: 'player'}, [
             r.a({className: 'btn' + (in_hash? ' active' : ''), onClick: this.onHash}, HASH_CHAR),
             r.a({className: 'btn', onClick: this.props.onPrev}, LEFT_CHAR),
-            r.a({className: 'btn', onClick: this.onTogglePlay}, pp_btn_char),
-            r.a({className: 'btn', onClick: this.props.onNext}, RIGHT_CHAR)
-            //r.span({className: 'title'}, this.state.track_title)
+            r.a({className: 'btn', onClick: this.props.onTogglePlay}, pp_btn_char),
+            r.a({className: 'btn', onClick: this.props.onNext}, RIGHT_CHAR),
+            r.span({className: 'title'}, this.props.track)
         ]);
     }
 });
