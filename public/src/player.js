@@ -6,6 +6,7 @@ var PAUSE_CHAR = '❚❚';
 var LEFT_CHAR = '❰';
 var HASH_CHAR = '#';
 var RIGHT_CHAR = '❱';
+var SHUFFLE_CHAR = '🔀';
 
 var current_track = null;
 var sound = null;
@@ -20,31 +21,36 @@ var Player = React.createClass({
         }
     },
     render: function() {
+        var self = this;
         var pp_btn_char;
         if (this.props.playing) {
             if (current_track != this.props.track) {
                 current_track = this.props.track;
-                if (sound) {
-                    sound.unbind('ended');
-                    sound.stop();
-                    sound = null;
-                }
-            }
-            if (!sound) {
-                console.log('new sound');
-                sound = new buzz.sound('/rpc?method=track.get&track=' + this.props.track);
-                var self = this;
-                sound.bind('ended', function() {
+
+                var newSound = new buzz.sound('/rpc?method=track.get&track=' + this.props.track);
+                newSound.bind('ended', function() {
                     self.props.onNext();
                 });
-                sound.play();
-            }
-            if (sound.isPaused()) {
+                newSound.bind('error', function() {
+                    self.props.onTogglePlay();
+                });
+                if (sound) {
+                    sound.unbind('ended');
+                    sound.unbind('error');
+                    console.log('stop');
+                    sound.stop();
+                }
+                sound = newSound;
+                setTimeout(function() {
+                    sound.play();
+                }, 100);
+            } else if (sound.isPaused()) {
                 sound.play();
             }
             pp_btn_char = PAUSE_CHAR;
         } else {
             if (sound) {
+                console.log('pause');
                 sound.pause();
             }
             pp_btn_char = PLAY_CHAR;
@@ -56,6 +62,7 @@ var Player = React.createClass({
             r.a({className: 'btn', onClick: this.props.onPrev}, LEFT_CHAR),
             r.a({className: 'btn', onClick: this.props.onTogglePlay}, pp_btn_char),
             r.a({className: 'btn', onClick: this.props.onNext}, RIGHT_CHAR),
+            r.a({className: 'btn ' + (this.props.shuffle? 'active' : ''), onClick: this.props.onToggleShuffle}, SHUFFLE_CHAR),
             r.span({className: 'title'}, this.props.track)
         ]);
     }

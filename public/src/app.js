@@ -14,7 +14,8 @@ var App = React.createClass({
             tracks: [],
             hashes: [],
             playing: null,
-            paused: true
+            paused: true,
+            shuffle: true
         };
     },
     componentDidMount: function() {
@@ -72,10 +73,19 @@ var App = React.createClass({
             this.setState({ paused: !this.state.paused });
         }
     },
+    toggleShuffle: function() {
+        this.setState({ shuffle: !this.state.shuffle });
+    },
+    doShuffle: function() {
+        this.upTrack(Math.floor((this.state.tracks.length - 1) * Math.random()) + 1);
+    },
     prevTrack: function() {
         this.upTrack(-1);
     },
     nextTrack: function() {
+        if (this.state.shuffle) {
+            return this.doShuffle();
+        }
         this.upTrack(1);
     },
     upTrack: function(delta) {
@@ -137,7 +147,9 @@ var App = React.createClass({
                 rmHash: this.rmHash,
                 onTogglePlay: this.togglePlay,
                 onPrev: this.prevTrack,
-                onNext: this.nextTrack
+                onNext: this.nextTrack,
+                shuffle: this.state.shuffle,
+                onToggleShuffle: this.toggleShuffle
             })
         ]);
     }
