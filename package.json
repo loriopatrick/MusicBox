@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "web-dev": "watchify -o public/app.js public/src/index.js"
+    "web-dev": "watchify -o public/app.js public/src/index.js",
+    "serve": "serve public"
   },
   "author": "Patrick Lorio <patrick@lorio.me>",
   "license": "MIT",
@@ -15,5 +16,9 @@
     "react-dom": "0.14.8",
     "sqlite3": "3.1.3",
     "superagent": "1.8.3"
+  },
+  "devDependencies": {
+      "watchify": "3.7.0",
+      "serve": "1.4.0"
   }
 }
