@@ -4,7 +4,7 @@ clean:
 	rm -rf dist || 1
 	mkdir dist
 build_go:
-	GOARCH=amd64 GOOS=linux go build -o dist/app ../main.go ../app.go
+	GOARCH=amd64 GOOS=linux CGO_ENABLED=0 go build -o dist/app ../main.go ../app.go
 website:
 	mkdir dist/public
 	browserify ../public/src/index.js | uglifyjs > dist/public/app.js
